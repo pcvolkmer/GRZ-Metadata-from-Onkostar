@@ -1,10 +1,11 @@
-SELECT 
+SELECT
   organisationunit.identifier AS submission_labname,
+  einsendenummer AS submission_localcaseid,
   CASE
     WHEN patient.geschlecht = 'm' THEN 'male'
     WHEN patient.geschlecht = 'w' THEN 'female'
     WHEN patient.geschlecht = 'u' THEN 'unknown'
-    ELSE 'other' 
+    ELSE 'other'
   END AS donors_items_gender,
   'index' AS donors_items_relation, # Fix?
   CONCAT(prop_probenmaterial.shortdesc, ' ', prop_nukleinsaeure.shortdesc) AS donors_items_labdata_items_labdataname,
@@ -15,7 +16,7 @@ SELECT
     WHEN dk_molekulargenetik.artdersequenzierung = 'WES' THEN 'wes'
     WHEN dk_molekulargenetik.artdersequenzierung = 'WGS' THEN 'wgs'
     WHEN dk_molekulargenetik.artdersequenzierung = 'X' THEN 'unknown'
-    ELSE 'other' 
+    ELSE 'other'
   END AS donors_items_labdata_items_librarytype,
   dk_molekulargenetik.tumorzellgehalt AS donors_items_labdata_items_tumorCellCount_items_count,
   CASE
