@@ -1,5 +1,10 @@
 SELECT
   organisationunit.identifier AS submission_labname,
+  CASE
+    WHEN kostentraegertyp = 'GKV' THEN 'GKV'
+    WHEN kostentraegertyp = 'PKV' THEN 'PKV'
+    ELSE 'UNK'
+  END AS submission_coveragetype,
   einsendenummer AS submission_localcaseid,
   CASE
     WHEN patient.geschlecht = 'm' THEN 'male'
