@@ -24,6 +24,7 @@ SELECT
     WHEN dk_molekulargenetik.artdersequenzierung = 'X' THEN 'unknown'
     ELSE 'other'
   END AS donors_items_labdata_items_librarytype,
+  dk_molekulargenetik.panel AS x_panel, # Use this to select default Kit info
   dk_molekulargenetik.tumorzellgehalt AS donors_items_labdata_items_tumorCellCount_items_count,
   CASE
     WHEN dk_molekulargenetik.referenzgenom = 'HG19' THEN 'GRCh37'
