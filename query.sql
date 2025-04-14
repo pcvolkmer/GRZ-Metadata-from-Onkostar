@@ -20,6 +20,7 @@ SELECT
   CASE
     WHEN dk_molekulargenetik.artdersequenzierung = 'WES' THEN 'wes'
     WHEN dk_molekulargenetik.artdersequenzierung = 'WGS' THEN 'wgs'
+    WHEN dk_molekulargenetik.artdersequenzierung = 'PanelKit' THEN 'panel'
     WHEN dk_molekulargenetik.artdersequenzierung = 'X' THEN 'unknown'
     ELSE 'other'
   END AS donors_items_labdata_items_librarytype,
