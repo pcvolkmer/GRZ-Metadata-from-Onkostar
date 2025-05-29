@@ -33,7 +33,7 @@ SELECT
 FROM dk_molekulargenetik
   JOIN prozedur ON (prozedur.id = dk_molekulargenetik.id)
   JOIN patient ON (patient.id = prozedur.patient_id)
-  JOIN organisationunit ON (organisationunit.id = dk_molekulargenetik.durchfuehrendeoe_fachabteilung)
+  LEFT JOIN organisationunit ON (organisationunit.id = dk_molekulargenetik.durchfuehrendeoe_fachabteilung)
   LEFT JOIN property_catalogue_version_entry AS prop_nukleinsaeure ON (
     prop_nukleinsaeure.property_version_id = dk_molekulargenetik.nukleinsaeure_propcat_version
 	  AND prop_nukleinsaeure.code = dk_molekulargenetik.nukleinsaeure)
