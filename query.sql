@@ -1,3 +1,5 @@
+### Generelle Informationen aus OS.Molekulargenetik
+
 SELECT
   organisationunit.identifier AS submission_labname,
   CASE
@@ -45,4 +47,24 @@ FROM dk_molekulargenetik
 	  AND prop_materialfixierung.code = dk_molekulargenetik.materialfixierung)
 
 # Hier die Einsendenummer aus Rohdaten-Datei in diesem Format einfügen
-WHERE einsendenummer = "..."
+WHERE einsendenummer = '...'
+
+
+### Weitere Informationen aus den DNPM-Formularen zu Fallnummer, Krankenkasse, ICD-O-3 etc.
+
+SELECT
+  dk_dnpm_kpa.fallnummermv AS fallnummer,
+  dk_dnpm_kpa.krankenkasse AS krankenkasse,
+  dk_dnpm_kpa.icdo3lokalisation AS icdo3lokalisation,
+  dk_dnpm_kpa.artderkrankenkasse as art_der_krankenkasse
+FROM dk_dnpm_kpa
+JOIN prozedur p_dnpm_kpa ON (p_dnpm_kpa.id = dk_dnpm_kpa.id)
+JOIN erkrankung_prozedur ON (p_dnpm_kpa.id = erkrankung_prozedur.prozedur_id)
+WHERE erkrankung_prozedur.erkrankung_id = (
+    SELECT erkrankung_prozedur.erkrankung_id
+    FROM dk_molekulargenetik
+    JOIN prozedur p_molekulargenetik ON (p_molekulargenetik.id = dk_molekulargenetik.id)
+    JOIN erkrankung_prozedur ON (p_molekulargenetik.id = erkrankung_prozedur.prozedur_id)
+    # Hier die Einsendenummer aus Rohdaten-Datei in diesem Format einfügen
+    WHERE einsendenummer = '...'
+);
