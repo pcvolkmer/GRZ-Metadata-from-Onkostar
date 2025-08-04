@@ -56,10 +56,27 @@ SELECT
   dk_dnpm_kpa.fallnummermv AS fallnummer,
   dk_dnpm_kpa.krankenkasse AS krankenkasse,
   dk_dnpm_kpa.icdo3lokalisation AS icdo3lokalisation,
-  dk_dnpm_kpa.artderkrankenkasse as art_der_krankenkasse
+  dk_dnpm_kpa.artderkrankenkasse AS art_der_krankenkasse,
+  dk_dnpm_consentmv.date AS consent_presentationDate,
+  consentverlauf.version AS consent_version,
+  consentverlauf.date AS consent_date,
+  dk_dnpm_consentmv.sequencing AS consent_seqencing,
+  dk_dnpm_consentmv.caseidentification AS consent_caseidentification,
+  dk_dnpm_consentmv.reidentification AS consent_reidentification
 FROM dk_dnpm_kpa
 JOIN prozedur p_dnpm_kpa ON (p_dnpm_kpa.id = dk_dnpm_kpa.id)
 JOIN erkrankung_prozedur ON (p_dnpm_kpa.id = erkrankung_prozedur.prozedur_id)
+JOIN dk_dnpm_consentmv ON (dk_dnpm_kpa.consentmv64e = dk_dnpm_consentmv.id)
+LEFT JOIN (
+    SELECT
+        dk_dnpm_uf_consentmvverlauf.version,
+        dk_dnpm_uf_consentmvverlauf.date,
+        prozedur.hauptprozedur_id
+    FROM dk_dnpm_uf_consentmvverlauf
+    JOIN prozedur ON (dk_dnpm_uf_consentmvverlauf.id = prozedur.id)
+    ORDER BY dk_dnpm_uf_consentmvverlauf.date DESC
+    LIMIT 1
+) consentverlauf ON (consentverlauf.hauptprozedur_id = dk_dnpm_consentmv.id)
 WHERE erkrankung_prozedur.erkrankung_id = (
     SELECT erkrankung_prozedur.erkrankung_id
     FROM dk_molekulargenetik
