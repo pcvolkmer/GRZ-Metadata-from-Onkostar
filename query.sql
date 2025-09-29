@@ -46,13 +46,14 @@ FROM dk_molekulargenetik
     prop_materialfixierung.property_version_id = dk_molekulargenetik.materialfixierung_propcat_version
 	  AND prop_materialfixierung.code = dk_molekulargenetik.materialfixierung)
 
-# Hier die Einsendenummer aus Rohdaten-Datei in diesem Format einfügen
+	# Hier die Einsendenummer aus Rohdaten-Datei in diesem Format einfügen
 WHERE einsendenummer = '...'
 
 
 ### Weitere Informationen aus den DNPM-Formularen zu Fallnummer, Krankenkasse, ICD-O-3 etc.
-
-SELECT
+### Bei mehreren Fällen werden mehrere Eintäge mit jeweiliger Fallnummer ermittelt.
+	
+SELECT DISTINCT
   dk_dnpm_kpa.fallnummermv AS fallnummer,
   dk_dnpm_kpa.krankenkasse AS krankenkasse,
   dk_dnpm_kpa.icdo3lokalisation AS icdo3lokalisation,
@@ -77,11 +78,12 @@ LEFT JOIN (
     ORDER BY dk_dnpm_uf_consentmvverlauf.date DESC
     LIMIT 1
 ) consentverlauf ON (consentverlauf.hauptprozedur_id = dk_dnpm_consentmv.id)
-WHERE erkrankung_prozedur.erkrankung_id = (
-    SELECT erkrankung_prozedur.erkrankung_id
+WHERE erkrankung_prozedur.erkrankung_id IN (
+    SELECT DISTINCT erkrankung_prozedur.erkrankung_id
     FROM dk_molekulargenetik
     JOIN prozedur p_molekulargenetik ON (p_molekulargenetik.id = dk_molekulargenetik.id)
     JOIN erkrankung_prozedur ON (p_molekulargenetik.id = erkrankung_prozedur.prozedur_id)
-    # Hier die Einsendenummer aus Rohdaten-Datei in diesem Format einfügen
+    
+	# Hier die Einsendenummer aus Rohdaten-Datei in diesem Format einfügen
     WHERE einsendenummer = '...'
 );
